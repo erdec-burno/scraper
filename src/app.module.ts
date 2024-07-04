@@ -4,8 +4,15 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { config } from 'dotenv';
+import { CitiesModule } from './cities/cities.module';
+import { HotelsBrandModule } from './hotels-brand/hotels-brand.module';
+import { HotelsModule } from './hotels/hotels.module';
+import { RoomsModule } from './rooms/rooms.module';
+import { ScraperSessionsModule } from './scraper-sessions/scraper-sessions.module';
 
 config();
+
+console.log(`ENVIRONMENT:`, process.env.NODE_ENV);
 
 @Module({
   imports: [
@@ -19,9 +26,14 @@ config();
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: false,
       migrations: [__dirname + '/../migrations/*.js'],
-      migrationsRun: true,
+      migrationsRun: process.env.NODE_ENV !== 'development',
     }),
     ConfigModule.forRoot(),
+    CitiesModule,
+    HotelsBrandModule,
+    HotelsModule,
+    RoomsModule,
+    ScraperSessionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
